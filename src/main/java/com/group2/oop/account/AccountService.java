@@ -24,7 +24,6 @@ public class AccountService implements Service {
 	@Override
 	public void init(Engine engine) {
 		System.out.println("------------------- Account -------------------");
-		System.out.println("Welcome to ${app_name}!");
 		System.out.println("1. Login");
 		System.out.println("2. Register");
 		System.out.println("");

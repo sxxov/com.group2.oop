@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
+		System.out.println("Welcome to ${app_name}!");
+
 		D.register(Scanner.class, new Scanner(System.in));
 		D.register(UserRepository.class, new UserRepository());
 		D.register(AccountManager.class, new AccountManager());

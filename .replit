@@ -2,7 +2,7 @@ compile = "javac -classpath .:target/dependency/* -d . $(find . -type f -name '*
 run = "java -classpath .:target/dependency/* com.group2.oop.Main"
 entrypoint = "com/group2/oop/Main.java"
 hidden = ["**/*.class"]
-language = "java21"
+language = "java17"
 
 [packager]
 language = "java"

@@ -5,18 +5,20 @@ import java.util.UUID;
 
 public record User(
 	UUID uuid,
-	String username,
+	String email,
+	String token,
 	String firstName,
 	String lastName
 ) {
 	public User {
 		Objects.requireNonNull(uuid);
-		Objects.requireNonNull(username);
+		Objects.requireNonNull(email);
+		Objects.requireNonNull(token);
 		Objects.requireNonNull(firstName);
 		Objects.requireNonNull(lastName);
 	}
 
-	public User(String username, String firstName, String lastName) {
-		this(UUID.randomUUID(), username, firstName, lastName);
+	public User(String email, String token, String firstName, String lastName) {
+		this(UUID.randomUUID(), email, token, firstName, lastName);
 	}
 }

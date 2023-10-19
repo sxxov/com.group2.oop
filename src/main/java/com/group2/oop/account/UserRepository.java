@@ -6,21 +6,29 @@ import java.util.UUID;
 
 public class UserRepository {
 
-	private static HashMap<UUID, User> users = new HashMap<>();
+	private HashMap<UUID, User> users = new HashMap<>();
 
-	public static void add(User user) {
+	public void add(User user) {
 		users.put(user.uuid(), user);
 	}
 
-	public static Optional<User> get(UUID uuid) {
+	public Optional<User> get(String email) {
+		return users
+			.values()
+			.stream()
+			.filter(user -> user.email().equals(email))
+			.findFirst();
+	}
+
+	public Optional<User> get(UUID uuid) {
 		return Optional.ofNullable(users.get(uuid));
 	}
 
-	public static void remove(UUID uuid) {
+	public void remove(UUID uuid) {
 		users.remove(uuid);
 	}
 
-	public static void remove(User user) {
+	public void remove(User user) {
 		users.remove(user.uuid());
 	}
 }

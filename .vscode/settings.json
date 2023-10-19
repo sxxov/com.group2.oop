@@ -1,0 +1,10 @@
+{
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.compile.nullAnalysis.mode": "automatic",
+	"[java]": {
+		"editor.defaultFormatter": "mwpb.java-prettier-formatter"
+	},
+	"java.checkstyle.configuration": "${workspaceFolder}\\checkstyle.xml",
+	"editor.formatOnSave": true,
+	"java.project.sourcePaths": ["src/main/java", "src/test/java"]
+}

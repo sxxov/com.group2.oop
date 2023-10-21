@@ -5,7 +5,10 @@ import com.group2.oop.account.AccountService;
 import com.group2.oop.dependency.D;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
+import com.group2.oop.form.submitImage;
+import com.group2.oop.admin.AdminMenu;
 import java.util.Scanner;
+import java.util.Optional;
 
 public class HomeService implements Service {
 
@@ -14,13 +17,21 @@ public class HomeService implements Service {
 
 	@Override
 	public void init(Engine engine) {
-		System.out.println("------------------- Home -------------------");
+		/*System.out.println("------------------- Home -------------------");
 		var user = account.current().get();
-		System.out.println("Welcome, " + user.firstName() + "!");
+		System.out.println("Welcome, " + user.firstName() + "!");*/
+
+    Optional<String> userOptional = account.current().map(user -> user.firstName());
+    if (userOptional.isPresent()) {
+        System.out.println("------------------- Home -------------------");
+        String user = userOptional.get();
+        System.out.println("Welcome, " + user + "!");
+    
 
 		for (;;) {
 			System.out.println("1. Logout");
-			System.out.println("");
+      System.out.println("2. Submit an image");
+      System.out.println("");
 			System.out.println("0. Exit");
 
 			int choice;
@@ -44,6 +55,11 @@ public class HomeService implements Service {
 					engine.swap(new AccountService());
 
 					return;
+
+        case 2:
+          engine.swap(new submitImage());
+
+          return;
 				case 0:
 					engine.exit();
 
@@ -54,6 +70,9 @@ public class HomeService implements Service {
 					continue;
 			}
 		}
+    } else {
+        engine.exit();
+    }
 	}
 
 	@Override

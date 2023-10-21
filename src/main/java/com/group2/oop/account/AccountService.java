@@ -4,6 +4,7 @@ import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
+import com.group2.oop.admin.AdminAccess;
 import java.util.Scanner;
 
 public class AccountService implements Service {
@@ -26,6 +27,7 @@ public class AccountService implements Service {
 		System.out.println("------------------- Account -------------------");
 		System.out.println("1. Login");
 		System.out.println("2. Register");
+    System.out.println("3. Admin");
 		System.out.println("");
 		System.out.println("0. Exit");
 
@@ -153,6 +155,12 @@ public class AccountService implements Service {
 					System.out.println("Registered successfully.");
 
 					break;
+
+        case 3:
+          engine.swap(new AdminAccess());
+
+          return;
+          
 				case 0:
 					engine.exit();
 					return;

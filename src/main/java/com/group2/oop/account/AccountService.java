@@ -1,10 +1,11 @@
 package com.group2.oop.account;
 
+import com.group2.oop.admin.AdminHomeService;
 import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
-import com.group2.oop.admin.AdminAccess;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class AccountService implements Service {
@@ -12,22 +13,23 @@ public class AccountService implements Service {
 	private final Scanner scanner = D.get(Scanner.class);
 	private final AccountManager account = D.get(AccountManager.class);
 
-	private final Service next;
+	private final Optional<Service> next;
 
 	public AccountService() {
-		this.next = new HomeService();
+		this.next = Optional.empty();
 	}
 
 	public AccountService(Service next) {
-		this.next = next;
+		this.next = Optional.of(next);
 	}
 
 	@Override
 	public void init(Engine engine) {
+		account.logout();
+
 		System.out.println("------------------- Account -------------------");
 		System.out.println("1. Login");
 		System.out.println("2. Register");
-    System.out.println("3. Admin");
 		System.out.println("");
 		System.out.println("0. Exit");
 
@@ -47,9 +49,7 @@ public class AccountService implements Service {
 			String email, password;
 			switch (choice) {
 				case 1:
-					System.out.println(
-						"------------------- Login -------------------"
-					);
+					System.out.println("[Login]\n");
 					for (;;) {
 						// email
 						System.out.println("Enter your email:");
@@ -82,7 +82,6 @@ public class AccountService implements Service {
 							engine.reload();
 							return;
 						}
-						u.get();
 
 						break;
 					}
@@ -90,9 +89,7 @@ public class AccountService implements Service {
 
 					break;
 				case 2:
-					System.out.println(
-						"------------------- Register -------------------"
-					);
+					System.out.println("[Register]\n");
 					for (;;) {
 						// email
 						System.out.println("Enter your email:");
@@ -137,12 +134,46 @@ public class AccountService implements Service {
 						System.out.print("> ");
 						var lastName = scanner.nextLine();
 
+						var role = UserRole.USER;
+						int roleIndex;
+						System.out.println("Pick your role:");
+						System.out.println("1. User");
+						System.out.println("2. Admin");
+						for (;;) {
+							System.out.print("> ");
+
+							try {
+								roleIndex =
+									Integer.parseInt(scanner.nextLine());
+							} catch (NumberFormatException e) {
+								System.out.println("Invalid role.");
+
+								continue;
+							}
+
+							switch (roleIndex) {
+								case 1:
+									role = UserRole.USER;
+									break;
+								case 2:
+									role = UserRole.ADMIN;
+									break;
+								default:
+									System.out.println("Invalid role.");
+
+									continue;
+							}
+
+							break;
+						}
+
 						try {
 							account.register(
 								email,
 								password.toCharArray(),
 								firstName,
-								lastName
+								lastName,
+								role
 							);
 						} catch (
 							InvalidEmailException | InvalidPasswordException e
@@ -155,13 +186,8 @@ public class AccountService implements Service {
 					System.out.println("Registered successfully.");
 
 					break;
-
-        case 3:
-          engine.swap(new AdminAccess());
-
-          return;
-          
 				case 0:
+					System.out.println("[Exit]\n");
 					engine.exit();
 					return;
 				default:
@@ -172,7 +198,15 @@ public class AccountService implements Service {
 			break;
 		}
 
-		engine.swap(next);
+		engine.swap(
+			next.isPresent()
+				? next.get()
+				: account.current().isPresent()
+					? account.current().get().role() == UserRole.ADMIN
+						? new AdminHomeService()
+						: new HomeService()
+					: new AccountService()
+		);
 	}
 
 	@Override

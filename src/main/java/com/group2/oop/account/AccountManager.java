@@ -38,19 +38,29 @@ public class AccountManager {
 		String email,
 		char[] password,
 		String firstName,
-		String lastName
+		String lastName,
+		UserRole role
 	) throws InvalidEmailException, InvalidPasswordException {
 		if (!isValidEmail(email)) throw new InvalidEmailException();
 		if (!isValidPassword(password)) throw new InvalidPasswordException();
 
 		var auth = new PasswordAuth();
 		var token = auth.hash(password);
-		var user = new User(email, token, firstName, lastName);
+		var user = new User(email, token, firstName, lastName, role);
 		userRepository.add(user);
 
 		current = Optional.of(user);
 
 		return user;
+	}
+
+	public User register(
+		String email,
+		char[] password,
+		String firstName,
+		String lastName
+	) throws InvalidEmailException, InvalidPasswordException {
+		return register(email, password, firstName, lastName, UserRole.USER);
 	}
 
 	private static Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");

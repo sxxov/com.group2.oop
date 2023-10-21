@@ -3,12 +3,10 @@ package com.group2.oop.home;
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
 import com.group2.oop.dependency.D;
+import com.group2.oop.form.ImageFormService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
-import com.group2.oop.form.submitImage;
-import com.group2.oop.admin.AdminMenu;
 import java.util.Scanner;
-import java.util.Optional;
 
 public class HomeService implements Service {
 
@@ -17,22 +15,20 @@ public class HomeService implements Service {
 
 	@Override
 	public void init(Engine engine) {
-		/*System.out.println("------------------- Home -------------------");
-		var user = account.current().get();
-		System.out.println("Welcome, " + user.firstName() + "!");*/
+		if (account.current().isEmpty()) {
+			engine.swap(new AccountService());
 
-    Optional<String> userOptional = account.current().map(user -> user.firstName());
-    if (userOptional.isPresent()) {
-        System.out.println("------------------- Home -------------------");
-        String user = userOptional.get();
-        System.out.println("Welcome, " + user + "!");
-    
+			return;
+		}
+
+		System.out.println("------------------- Home -------------------");
+		var user = account.current().get();
+		System.out.println("Welcome, " + user.firstName() + "!");
 
 		for (;;) {
-			System.out.println("1. Logout");
-      System.out.println("2. Submit an image");
-      System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("1. Your images");
+			System.out.println("");
+			System.out.println("0. Logout & Exit");
 
 			int choice;
 			for (;;) {
@@ -51,17 +47,14 @@ public class HomeService implements Service {
 
 			switch (choice) {
 				case 1:
-					account.logout();
-					engine.swap(new AccountService());
+					System.out.println("[Your images]\n");
+					engine.swap(new ImageFormService());
 
 					return;
-
-        case 2:
-          engine.swap(new submitImage());
-
-          return;
 				case 0:
-					engine.exit();
+					System.out.println("[Logout & Exit]\n");
+					account.logout();
+					engine.swap(new AccountService());
 
 					return;
 				default:
@@ -70,9 +63,6 @@ public class HomeService implements Service {
 					continue;
 			}
 		}
-    } else {
-        engine.exit();
-    }
 	}
 
 	@Override

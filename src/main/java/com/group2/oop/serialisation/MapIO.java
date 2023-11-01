@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class MapIO<K, V> implements IO<HashMap<K, V>> {
+public class MapIO<K, V> implements IO<HashMap<K, V>>, Serializable  {
 
 	private final String path;
 	private final HashMap<K, V> ref;

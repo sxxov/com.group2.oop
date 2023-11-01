@@ -6,7 +6,7 @@ import com.group2.oop.dependency.D;
 import com.group2.oop.form.ImageFormService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
-import com.group2.oop.voucher.userVoucher;
+import com.group2.oop.voucher.UserVoucherService;
 import java.util.Scanner;
 
 public class HomeService implements Service {
@@ -17,7 +17,7 @@ public class HomeService implements Service {
 	@Override
 	public void init(Engine engine) {
 		if (account.current().isEmpty()) {
-			engine.swap(new AccountService()); 
+			engine.swap(new AccountService());
 			return;
 		}
 
@@ -27,7 +27,7 @@ public class HomeService implements Service {
 
 		for (;;) {
 			System.out.println("1. Your images");
-      System.out.println("2. Your Voucher"); 
+			System.out.println("2. Your vouchers");
 			System.out.println("");
 			System.out.println("0. Logout & Exit");
 
@@ -52,13 +52,11 @@ public class HomeService implements Service {
 					engine.swap(new ImageFormService());
 
 					return;
-          
-          case 2:
-          System.out.println("[Your voucher]\n");
-          engine.swap(new userVoucher());
+				case 2:
+					System.out.println("[Your vouchers]\n");
+					engine.swap(new UserVoucherService());
 
-          return;
-          
+					return;
 				case 0:
 					System.out.println("[Logout & Exit]\n");
 					account.logout();

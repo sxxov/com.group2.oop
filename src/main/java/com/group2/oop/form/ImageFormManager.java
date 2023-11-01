@@ -2,14 +2,19 @@ package com.group2.oop.form;
 
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.UnauthorisedException;
+import com.group2.oop.account.UserRepository;
 import com.group2.oop.dependency.D;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 public class ImageFormManager {
 
 	private final ImageFormRepository repository = D.get(
 		ImageFormRepository.class
 	);
+
+	private final UserRepository users = D.get(UserRepository.class);
 
 	private final AccountManager account = D.get(AccountManager.class);
 
@@ -20,13 +25,16 @@ public class ImageFormManager {
 
 		var image = new ImageForm(src, user.get());
 
-		repository.add(image);
+		repository
+			.drill(user.get().uuid()) //
+			.drill(image.src())
+			.put(image);
 
 		return image;
 	}
 
-	public void approve(String src) throws NullPointerException {
-		var o = repository.get(src);
+	public void approve(UUID uuid, String src) throws NullPointerException {
+		var o = repository.drill(uuid).drill(src);
 
 		if (o.isEmpty()) throw new NullPointerException(
 			"Cannot approve image that does not exist."
@@ -35,8 +43,8 @@ public class ImageFormManager {
 		o.get().approve();
 	}
 
-	public void reject(String src) throws NullPointerException {
-		var o = repository.get(src);
+	public void reject(UUID uuid, String src) throws NullPointerException {
+		var o = repository.drill(uuid).drill(src);
 
 		if (o.isEmpty()) throw new NullPointerException(
 			"Cannot approve image that does not exist."
@@ -45,30 +53,61 @@ public class ImageFormManager {
 		o.get().reject();
 	}
 
-	public void remove(String src) {
-		repository.remove(src);
+	public void remove(UUID uuid, String src) {
+		repository.drill(uuid).drill(src).remove();
 	}
 
-	public Collection<ImageForm> all() {
-		return repository.all();
+	public Collection<ImageForm> allEveryone() {
+		var forms = new ArrayList<ImageForm>();
+
+		for (var user : users.values()) {
+			forms.addAll(repository.drill(user.uuid()).ref().values());
+		}
+
+		return forms;
 	}
 
-	public Collection<ImageForm> allPending() {
-		return all()
+	public Collection<ImageForm> all(UUID uuid) {
+		return repository.drill(uuid).ref().values();
+	}
+
+	public Collection<ImageForm> allEveryonePending() {
+		return allEveryone()
 			.stream()
 			.filter(image -> image.status().get() == ImageFormStatus.PENDING)
 			.toList();
 	}
 
-	public Collection<ImageForm> allApproved() {
-		return all()
+	public Collection<ImageForm> allPending(UUID uuid) {
+		return all(uuid)
+			.stream()
+			.filter(image -> image.status().get() == ImageFormStatus.PENDING)
+			.toList();
+	}
+
+	public Collection<ImageForm> allEveryoneApproved() {
+		return allEveryone()
 			.stream()
 			.filter(image -> image.status().get() == ImageFormStatus.APPROVED)
 			.toList();
 	}
 
-	public Collection<ImageForm> allRejected() {
-		return all()
+	public Collection<ImageForm> allApproved(UUID uuid) {
+		return all(uuid)
+			.stream()
+			.filter(image -> image.status().get() == ImageFormStatus.APPROVED)
+			.toList();
+	}
+
+	public Collection<ImageForm> allEveryoneRejected() {
+		return allEveryone()
+			.stream()
+			.filter(image -> image.status().get() == ImageFormStatus.REJECTED)
+			.toList();
+	}
+
+	public Collection<ImageForm> allRejected(UUID uuid) {
+		return all(uuid)
 			.stream()
 			.filter(image -> image.status().get() == ImageFormStatus.REJECTED)
 			.toList();

@@ -47,7 +47,7 @@ public class AccountManager {
 		var auth = new PasswordAuth();
 		var token = auth.hash(password);
 		var user = new User(email, token, firstName, lastName, role);
-		userRepository.add(user);
+		userRepository.put(user.uuid(), user);
 
 		current = Optional.of(user);
 

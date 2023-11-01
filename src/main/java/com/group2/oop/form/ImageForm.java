@@ -1,6 +1,7 @@
 package com.group2.oop.form;
 
 import com.group2.oop.account.User;
+import com.group2.oop.db.Effect;
 import com.group2.oop.store.Store;
 import com.group2.oop.store.Supply;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class ImageForm implements Serializable {
 		return submitter;
 	}
 
+	@Effect
 	private Store<ImageFormStatus> status;
 
 	public Supply<ImageFormStatus> status() {

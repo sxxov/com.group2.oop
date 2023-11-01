@@ -31,8 +31,8 @@ public class Store<T> implements WritableStore<T>, Serializable {
 	}
 
 	public void set(T value) {
-		this.value = value;
 		trigger(value);
+		this.value = value;
 	}
 
 	public void update(StorePipe<T, T> pipe) {
@@ -50,8 +50,8 @@ public class Store<T> implements WritableStore<T>, Serializable {
 	}
 
 	public StoreSubscribed<T> subscribe(StoreSubscriber<T> subscriber) {
-		subscribers.add(subscriber);
 		subscriber.onValue(value);
+		subscribers.add(subscriber);
 
 		return () -> {
 			unsubscribe(subscriber);

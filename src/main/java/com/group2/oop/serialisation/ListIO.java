@@ -5,48 +5,43 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.ParameterizedType;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collection;
 
-public class MapIO<K, V> implements IO<HashMap<K, V>> {
+public class ListIO<T> implements IO<ArrayList<T>> {
 
 	private final String path;
-	private final HashMap<K, V> ref;
+	private final ArrayList<T> ref;
 
-	public HashMap<K, V> ref() {
+	public ArrayList<T> ref() {
 		return ref;
 	}
 
-	public MapIO(HashMap<K, V> ref, String path) {
-		this.ref = ref;
+	public ListIO(Collection<T> ref, String path) {
+		this.ref = new ArrayList<>(ref);
 		this.path = path;
 	}
 
 	@SuppressWarnings("unchecked")
-	public HashMap<K, V> read() throws IOException {
+	public ArrayList<T> read() throws IOException {
 		try (
 			var fileIn = new FileInputStream(path);
 			var in = new ObjectInputStream(fileIn)
 		) {
 			if (
-				!(in.readObject() instanceof HashMap<?, ?> readMap)
+				!(in.readObject() instanceof ArrayList<?> readList)
 			) throw new RuntimeException(
 				"Fatally invalid data type in " +
 				path +
-				". Expected HashMap<?, ?>."
+				". Expected ArrayList<?>."
 			);
 
-			for (var entry : readMap.entrySet()) {
-				var kRaw = entry.getKey();
-				var vRaw = entry.getValue();
-				K k;
-				V v;
+			for (var vRaw : readList) {
+				T v;
 
 				try {
-					k = (K) kRaw;
-					v = (V) vRaw;
+					v = (T) vRaw;
 				} catch (ClassCastException e) {
 					var typeArgs =
 						(
@@ -66,8 +61,6 @@ public class MapIO<K, V> implements IO<HashMap<K, V>> {
 						". Expected " +
 						String.join(", ", typeArgNames) +
 						". Found " +
-						kRaw.getClass().getName() +
-						", " +
 						vRaw.getClass().getName() +
 						"."
 					);
@@ -75,12 +68,12 @@ public class MapIO<K, V> implements IO<HashMap<K, V>> {
 					continue;
 				}
 
-				ref.put(k, v);
+				ref.add(v);
 			}
 
 			return ref;
 		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException("Could not find HashMap class??");
+			throw new IllegalStateException("Could not find ArrayList class??");
 		} catch (FileNotFoundException e) {
 			write();
 
@@ -89,7 +82,6 @@ public class MapIO<K, V> implements IO<HashMap<K, V>> {
 	}
 
 	public void write() throws IOException {
-		Files.createDirectories(Path.of(path).getParent());
 		try (
 			var fileOut = new java.io.FileOutputStream(path);
 			var out = new java.io.ObjectOutputStream(fileOut)

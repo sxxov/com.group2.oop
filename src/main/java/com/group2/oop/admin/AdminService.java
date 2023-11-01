@@ -7,16 +7,27 @@ import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
 import com.group2.oop.form.ImageForm;
 import com.group2.oop.form.ImageFormManager;
+import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
 import com.group2.oop.voucher.AdminVoucherService;
 import java.util.Scanner;
 
-public class AdminHomeService implements Service {
+public class AdminService implements Service {
 
 	public final AccountManager account = D.get(AccountManager.class);
 	private final Scanner scanner = D.get(Scanner.class);
 	private final ImageFormManager imageFormManager = new ImageFormManager();
+
+	private final Service next;
+
+	public AdminService() {
+		this.next = new HomeService();
+	}
+
+	public AdminService(Service next) {
+		this.next = next;
+	}
 
 	private void printImageForms(ImageForm[] imageForms) {
 		System.out.println("---");
@@ -58,7 +69,7 @@ public class AdminHomeService implements Service {
 			System.out.println("6. Show all images");
 			System.out.println("7. Manage vouchers");
 			System.out.println("");
-			System.out.println("0. Logout & Exit");
+			System.out.println("0. Exit");
 			System.out.print("> ");
 
 			try {
@@ -74,7 +85,7 @@ public class AdminHomeService implements Service {
 					var approvedCount = 0;
 					for (;;) {
 						var approvableImages = imageFormManager
-							.allPending()
+							.allEveryonePending()
 							.toArray(new ImageForm[0]);
 
 						if (approvableImages.length == 0) {
@@ -109,7 +120,10 @@ public class AdminHomeService implements Service {
 							continue;
 						}
 
-						imageFormManager.approve(approvableImages[i - 1].src());
+						imageFormManager.approve(
+							approvableImages[i - 1].submitter().uuid(),
+							approvableImages[i - 1].src()
+						);
 						System.out.println("Image approved.");
 						System.out.println("");
 						++approvedCount;
@@ -123,7 +137,7 @@ public class AdminHomeService implements Service {
 					var rejectCount = 0;
 					for (;;) {
 						var rejectableImages = imageFormManager
-							.allPending()
+							.allEveryonePending()
 							.toArray(new ImageForm[0]);
 
 						if (rejectableImages.length == 0) {
@@ -158,7 +172,10 @@ public class AdminHomeService implements Service {
 							continue;
 						}
 
-						imageFormManager.reject(rejectableImages[i - 1].src());
+						imageFormManager.reject(
+							rejectableImages[i - 1].submitter().uuid(),
+							rejectableImages[i - 1].src()
+						);
 						System.out.println("Image rejected.");
 						System.out.println("");
 						++rejectCount;
@@ -170,7 +187,9 @@ public class AdminHomeService implements Service {
 				case 3:
 					System.out.println("[Show all pending images]\n");
 					printImageForms(
-						imageFormManager.allPending().toArray(new ImageForm[0])
+						imageFormManager
+							.allEveryonePending()
+							.toArray(new ImageForm[0])
 					);
 					Console.waitForEnter();
 					engine.reload();
@@ -178,7 +197,9 @@ public class AdminHomeService implements Service {
 				case 4:
 					System.out.println("[Show all approved images]\n");
 					printImageForms(
-						imageFormManager.allApproved().toArray(new ImageForm[0])
+						imageFormManager
+							.allEveryoneApproved()
+							.toArray(new ImageForm[0])
 					);
 					Console.waitForEnter();
 					engine.reload();
@@ -186,7 +207,9 @@ public class AdminHomeService implements Service {
 				case 5:
 					System.out.println("[Show all rejected images]\n");
 					printImageForms(
-						imageFormManager.allRejected().toArray(new ImageForm[0])
+						imageFormManager
+							.allEveryoneRejected()
+							.toArray(new ImageForm[0])
 					);
 					Console.waitForEnter();
 					engine.reload();
@@ -194,19 +217,18 @@ public class AdminHomeService implements Service {
 				case 6:
 					System.out.print("[Show all images]\n");
 					printImageForms(
-						imageFormManager.all().toArray(new ImageForm[0])
+						imageFormManager.allEveryone().toArray(new ImageForm[0])
 					);
 					Console.waitForEnter();
 					engine.reload();
 					return;
 				case 7:
 					System.out.print("[Manage vouchers]\n");
-					engine.swap(new AdminVoucherService());
+					engine.swap(new AdminVoucherService(this));
 					return;
 				case 0:
-					System.out.println("[Logout & Exit]\n");
-					account.logout();
-					engine.swap(new AccountService());
+					System.out.println("[Exit]\n");
+					engine.swap(next);
 					return;
 				default:
 					System.out.println("Invalid choice");

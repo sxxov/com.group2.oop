@@ -3,12 +3,13 @@ package com.group2.oop;
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
 import com.group2.oop.account.UserRepository;
+import com.group2.oop.carbon_credits.CarbonCreditAccountRepository;
 import com.group2.oop.dependency.D;
 import com.group2.oop.form.ImageFormManager;
 import com.group2.oop.form.ImageFormRepository;
 import com.group2.oop.service.Engine;
-import com.group2.oop.voucher.AdminVoucherRepository;
-import com.group2.oop.voucher.UserVoucherRepository;
+import com.group2.oop.voucher.VoucherManager;
+import com.group2.oop.voucher.VoucherRepository;
 import java.util.Scanner;
 
 public class Main {
@@ -21,8 +22,12 @@ public class Main {
 		D.register(AccountManager.class, new AccountManager());
 		D.register(ImageFormRepository.class, new ImageFormRepository());
 		D.register(ImageFormManager.class, new ImageFormManager());
-		D.register(AdminVoucherRepository.class, new AdminVoucherRepository());
-		D.register(UserVoucherRepository.class, new UserVoucherRepository());
+		D.register(
+			CarbonCreditAccountRepository.class,
+			new CarbonCreditAccountRepository()
+		);
+		D.register(VoucherRepository.class, new VoucherRepository());
+		D.register(VoucherManager.class, new VoucherManager());
 		var initialService = new AccountService();
 		var engine = new Engine(initialService);
 		D.register(Engine.class, engine);

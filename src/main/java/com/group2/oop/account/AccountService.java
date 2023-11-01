@@ -1,6 +1,5 @@
 package com.group2.oop.account;
 
-import com.group2.oop.admin.AdminHomeService;
 import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
@@ -202,9 +201,7 @@ public class AccountService implements Service {
 			next.isPresent()
 				? next.get()
 				: account.current().isPresent()
-					? account.current().get().role() == UserRole.ADMIN
-						? new AdminHomeService()
-						: new HomeService()
+					? new HomeService()
 					: new AccountService()
 		);
 	}

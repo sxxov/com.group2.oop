@@ -3,6 +3,7 @@ package com.group2.oop;
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
 import com.group2.oop.account.UserRepository;
+import com.group2.oop.carbon_credits.CarbonCreditAccountManager;
 import com.group2.oop.carbon_credits.CarbonCreditAccountRepository;
 import com.group2.oop.dependency.D;
 import com.group2.oop.form.ImageFormManager;
@@ -25,6 +26,10 @@ public class Main {
 		D.register(
 			CarbonCreditAccountRepository.class,
 			new CarbonCreditAccountRepository()
+		);
+		D.register(
+			CarbonCreditAccountManager.class,
+			new CarbonCreditAccountManager()
 		);
 		D.register(VoucherRepository.class, new VoucherRepository());
 		D.register(VoucherManager.class, new VoucherManager());

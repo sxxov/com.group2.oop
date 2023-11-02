@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class VoucherService implements Service {
 
 	public final AccountManager account = D.get(AccountManager.class);
+	public final VoucherManager manager = D.get(VoucherManager.class);
 	public final Scanner scanner = D.get(Scanner.class);
 
 	private final VoucherRepository repository = D.get(VoucherRepository.class);
@@ -42,7 +43,7 @@ public class VoucherService implements Service {
 				"\t : " +
 				voucher.price() +
 				"\t - " +
-				(voucher.redeemed().get() ? "redeemed" : "available") +
+				(voucher.redeemed().get() ? "redeemed" : "redeemable") +
 				"\t - " +
 				voucher.description()
 			);
@@ -119,7 +120,10 @@ public class VoucherService implements Service {
 									continue shopVoucherChoice;
 								}
 
-								if (voucherChoice == 0) continue main;
+								if (voucherChoice == 0) {
+									System.out.println("[Exit]\n");
+									continue main;
+								}
 
 								if (
 									voucherChoice < 0 ||
@@ -154,7 +158,7 @@ public class VoucherService implements Service {
 
 								if (price > credit.amount().get()) {
 									System.out.println(
-										"You don't have enough credits to redeem this voucher. " +
+										"You don't have enough credits to claim this voucher. " +
 										price +
 										" credits are required, whilst you only have" +
 										credit.amount().get() +
@@ -192,15 +196,13 @@ public class VoucherService implements Service {
 					case 2:
 						System.out.println("[Redeem a voucher]\n");
 
-						var ownedVouchers = repository
-							.drill(account.current().get().uuid())
-							.ref()
-							.values()
+						var ownedVouchers = manager
+							.allUnredeemed(account.current().get().uuid())
 							.toArray(Voucher[]::new);
 
 						if (ownedVouchers.length <= 0) {
 							System.out.println(
-								"You don't have any vouchers yet. Purchase some at the shop."
+								"You don't have any redeemable vouchers. Purchase some at the shop."
 							);
 
 							Console.waitForEnter();
@@ -228,7 +230,10 @@ public class VoucherService implements Service {
 									continue redeemVoucherChoice;
 								}
 
-								if (voucherChoice == 0) continue main;
+								if (voucherChoice == 0) {
+									System.out.println("[Exit]\n");
+									continue main;
+								}
 
 								if (
 									voucherChoice < 0 ||

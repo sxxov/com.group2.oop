@@ -1,5 +1,6 @@
 package com.group2.oop.voucher;
 
+import com.group2.oop.account.UserRepository;
 import com.group2.oop.admin.AdminService;
 import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
@@ -9,6 +10,7 @@ import java.util.Scanner;
 
 public class AdminVoucherService implements Service {
 
+	private final UserRepository userRepository = D.get(UserRepository.class);
 	private final Scanner scanner = D.get(Scanner.class);
 	private final VoucherManager manager = D.get(VoucherManager.class);
 
@@ -26,6 +28,7 @@ public class AdminVoucherService implements Service {
 		System.out.println("---");
 		for (int i = 0; i < vouchers.length; i++) {
 			var voucher = vouchers[i];
+			var claimant = userRepository.get(voucher.claimant().get());
 			System.out.println(
 				(i + 1) +
 				". " +
@@ -33,9 +36,13 @@ public class AdminVoucherService implements Service {
 				"\t : " +
 				voucher.price() +
 				"\t - " +
-				(voucher.claimed() ? "claimed" : "available") +
+				(
+					claimant == null || claimant.uuid() == Voucher.NO_CLAIMANT
+						? "unclaimed"
+						: ("claimed by " + claimant.email())
+				) +
 				"\t - " +
-				voucher.description()
+				(voucher.redeemed().get() ? "redeemed" : "redeemable")
 			);
 		}
 		System.out.println("---");
@@ -218,7 +225,7 @@ public class AdminVoucherService implements Service {
 							continue main;
 						case 0:
 							System.out.println("[Exit]\n");
-							continue main;
+							break main;
 						default:
 							System.out.println("Invalid action choice.");
 							continue actionChoice;

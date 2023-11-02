@@ -31,7 +31,7 @@ public class ImageFormManager {
 		var o = repository.drill(uuid).drill(src);
 
 		if (o.isEmpty()) throw new NullPointerException(
-			"Cannot approve image that does not exist."
+			"Cannot approve image that does not exist in the repository."
 		);
 
 		o.get().approve();
@@ -41,7 +41,7 @@ public class ImageFormManager {
 		var o = repository.drill(uuid).drill(src);
 
 		if (o.isEmpty()) throw new NullPointerException(
-			"Cannot approve image that does not exist."
+			"Cannot approve image that does not exist in the repository."
 		);
 
 		o.get().reject();

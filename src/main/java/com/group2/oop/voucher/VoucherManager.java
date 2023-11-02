@@ -26,6 +26,50 @@ public class VoucherManager {
 		repository.drill(Voucher.NO_CLAIMANT).drill(voucher.id()).put(voucher);
 	}
 
+	public Collection<Voucher> all(UUID uuid) {
+		return repository.drill(uuid).ref().values();
+	}
+
+	public Collection<Voucher> allUnclaimed(UUID uuid) {
+		return repository
+			.drill(uuid)
+			.ref()
+			.values()
+			.stream()
+			.filter(voucher -> !voucher.claimed())
+			.collect(Collectors.toList());
+	}
+
+	public Collection<Voucher> allClaimed(UUID uuid) {
+		return repository
+			.drill(uuid)
+			.ref()
+			.values()
+			.stream()
+			.filter(voucher -> voucher.claimed())
+			.collect(Collectors.toList());
+	}
+
+	public Collection<Voucher> allRedeemed(UUID uuid) {
+		return repository
+			.drill(uuid)
+			.ref()
+			.values()
+			.stream()
+			.filter(voucher -> voucher.redeemed().get())
+			.collect(Collectors.toList());
+	}
+
+	public Collection<Voucher> allUnredeemed(UUID uuid) {
+		return repository
+			.drill(uuid)
+			.ref()
+			.values()
+			.stream()
+			.filter(voucher -> !voucher.redeemed().get())
+			.collect(Collectors.toList());
+	}
+
 	public Collection<Voucher> allEveryone() {
 		return repository
 			.values()
@@ -49,6 +93,24 @@ public class VoucherManager {
 			.stream()
 			.flatMap(subRepo -> subRepo.values().stream())
 			.filter(voucher -> voucher.claimed())
+			.collect(Collectors.toList());
+	}
+
+	public Collection<Voucher> allEveryoneRedeemed() {
+		return repository
+			.values()
+			.stream()
+			.flatMap(subRepo -> subRepo.values().stream())
+			.filter(voucher -> voucher.redeemed().get())
+			.collect(Collectors.toList());
+	}
+
+	public Collection<Voucher> allEveryoneUnredeemed() {
+		return repository
+			.values()
+			.stream()
+			.flatMap(subRepo -> subRepo.values().stream())
+			.filter(voucher -> !voucher.redeemed().get())
 			.collect(Collectors.toList());
 	}
 }

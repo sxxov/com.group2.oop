@@ -1,6 +1,8 @@
 package com.group2.oop.db;
 
 import com.group2.oop.store.Store;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import javax.annotation.Nullable;
 
 public class SubRepository<K, V> extends EffectSubscribingMap<K, V> {
@@ -19,5 +21,12 @@ public class SubRepository<K, V> extends EffectSubscribingMap<K, V> {
 		MutationNotifier ctx
 	) {
 		store.trigger();
+	}
+
+	private void readObject(ObjectInputStream in)
+		throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+
+		subscribeToEffects();
 	}
 }

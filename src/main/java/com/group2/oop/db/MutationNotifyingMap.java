@@ -13,7 +13,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public V put(K k, V v) {
 		var old = super.put(k, v);
 
-		onMutate(k, v, this);
+		onMutated(k, v, this);
 
 		return old;
 	}
@@ -22,7 +22,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public V remove(Object k) {
 		var old = super.remove(k);
 
-		if (old != null) onMutate(k, null, this);
+		if (old != null) onMutated(k, null, this);
 
 		return old;
 	}
@@ -33,14 +33,14 @@ public abstract class MutationNotifyingMap<K, V>
 
 		super.clear();
 
-		if (!isAlreadyEmpty) onMutate(null, null, this);
+		if (!isAlreadyEmpty) onMutated(null, null, this);
 	}
 
 	@Override
 	public void putAll(@Nullable Map<? extends K, ? extends V> m) {
 		super.putAll(m);
 
-		if (m != null) for (var e : m.entrySet()) onMutate(
+		if (m != null) for (var e : m.entrySet()) onMutated(
 			e.getKey(),
 			e.getValue(),
 			this
@@ -51,7 +51,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public V putIfAbsent(K k, V v) {
 		var old = super.putIfAbsent(k, v);
 
-		if (old != v) onMutate(k, v, this);
+		if (old != v) onMutated(k, v, this);
 
 		return old;
 	}
@@ -60,7 +60,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public boolean remove(Object k, Object v) {
 		var ok = super.remove(k, v);
 
-		if (ok) onMutate(k, null, this);
+		if (ok) onMutated(k, null, this);
 
 		return ok;
 	}
@@ -69,7 +69,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public boolean replace(K k, V v, V v2) {
 		var ok = super.replace(k, v, v2);
 
-		if (ok) onMutate(k, v2, this);
+		if (ok) onMutated(k, v2, this);
 
 		return ok;
 	}
@@ -78,7 +78,7 @@ public abstract class MutationNotifyingMap<K, V>
 	public V replace(K k, V v) {
 		var old = super.replace(k, v);
 
-		if (old != v) onMutate(k, v, this);
+		if (old != v) onMutated(k, v, this);
 
 		return old;
 	}
@@ -89,6 +89,6 @@ public abstract class MutationNotifyingMap<K, V>
 	) {
 		super.replaceAll(function);
 
-		for (var e : entrySet()) onMutate(e.getKey(), e.getValue(), this);
+		for (var e : entrySet()) onMutated(e.getKey(), e.getValue(), this);
 	}
 }

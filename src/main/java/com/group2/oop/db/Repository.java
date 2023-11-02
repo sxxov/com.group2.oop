@@ -54,7 +54,7 @@ public class Repository<K, V> extends SubRepository<K, V> {
 	}
 
 	@Override
-	public void onMutate(
+	public void onMutated(
 		@Nullable Object k,
 		@Nullable Object v,
 		MutationNotifier ctx

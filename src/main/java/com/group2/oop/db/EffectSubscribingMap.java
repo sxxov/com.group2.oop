@@ -20,7 +20,7 @@ public abstract class EffectSubscribingMap<K, V>
 						var value = field.get(v);
 						if (value instanceof ReadableStore<?> store) {
 							store.subscribeLazy(vv -> {
-								onMutate(k, v, this);
+								onMutated(k, v, this);
 							});
 						}
 					} catch (IllegalAccessException e) {

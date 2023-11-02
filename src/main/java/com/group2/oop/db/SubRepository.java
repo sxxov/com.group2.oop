@@ -13,7 +13,7 @@ public class SubRepository<K, V> extends EffectSubscribingMap<K, V> {
 	}
 
 	@Override
-	public void onMutate(
+	public void onMutated(
 		@Nullable Object k,
 		@Nullable Object v,
 		MutationNotifier ctx

@@ -33,15 +33,21 @@ public class AccountManager {
 		}
 	}
 
+	public boolean exists(String email) {
+		return userRepository.get(email) != null;
+	}
+
 	public User register(
 		String email,
 		char[] password,
 		String firstName,
 		String lastName,
 		UserRole role
-	) throws InvalidEmailException, InvalidPasswordException {
+	)
+		throws InvalidEmailException, InvalidPasswordException, UserAlreadyExistsException {
 		if (!isValidEmail(email)) throw new InvalidEmailException();
 		if (!isValidPassword(password)) throw new InvalidPasswordException();
+		if (exists(email)) throw new UserAlreadyExistsException();
 
 		var auth = new PasswordAuth();
 		var token = auth.hash(password);
@@ -58,7 +64,8 @@ public class AccountManager {
 		char[] password,
 		String firstName,
 		String lastName
-	) throws InvalidEmailException, InvalidPasswordException {
+	)
+		throws InvalidEmailException, InvalidPasswordException, UserAlreadyExistsException {
 		return register(email, password, firstName, lastName, UserRole.USER);
 	}
 

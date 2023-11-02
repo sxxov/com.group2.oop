@@ -1,5 +1,6 @@
 package com.group2.oop.account;
 
+import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
@@ -26,33 +27,35 @@ public class AccountService implements Service {
 	public void init(Engine engine) {
 		account.logout();
 
-		System.out.println("------------------- Account -------------------");
-		System.out.println("1. Login");
-		System.out.println("2. Register");
-		System.out.println("");
-		System.out.println("0. Exit");
+		main:for (;;) {
+			System.out.println(
+				"------------------- Account -------------------"
+			);
+			System.out.println("1. Login");
+			System.out.println("2. Register");
+			System.out.println("");
+			System.out.println("0. Exit");
 
-		int choice;
-		for (;;) {
-			System.out.print("> ");
+			int choice;
+			mainChoice:for (;;) {
+				System.out.print("> ");
 
-			try {
-				choice = Integer.parseInt(scanner.nextLine());
-			} catch (NumberFormatException e) {
-				System.out.println("Invalid choice.");
+				try {
+					choice = Integer.parseInt(scanner.nextLine());
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid choice.");
 
-				continue;
-			}
+					continue mainChoice;
+				}
 
-			// TODO: don't store passwords in heap, use char[] instead
-			String email, password;
-			switch (choice) {
-				case 1:
-					System.out.println("[Login]\n");
-					for (;;) {
+				// TODO: don't store passwords in heap, use char[] instead
+				String email, password;
+				switch (choice) {
+					case 1:
+						System.out.println("[Login]\n");
 						// email
 						System.out.println("Enter your email:");
-						for (;;) {
+						email:for (;;) {
 							System.out.print("> ");
 							email = scanner.nextLine();
 
@@ -60,39 +63,46 @@ public class AccountService implements Service {
 								System.out.println(
 									"Email must follow the format: <username>@<domain>"
 								);
-								continue;
+								continue email;
 							}
 
-							break;
+							if (!account.exists(email)) {
+								System.out.println("Email does not exist.");
+								Console.waitForEnter();
+
+								continue main;
+							}
+
+							break email;
 						}
 						// password
 						System.out.println("Enter your password:");
-						for (;;) {
-							System.out.print("> ");
-							password = scanner.nextLine();
-
-							break;
-						}
+						System.out.print("> ");
+						password = scanner.nextLine();
 
 						var u = account.login(email, password.toCharArray());
 						if (u.isEmpty()) {
-							System.out.println("Invalid email or password!");
+							System.out.println("Invalid email or password.");
+							Console.waitForEnter();
 
-							engine.reload();
-							return;
+							continue main;
 						}
 
-						break;
-					}
-					System.out.println("Logged in successfully.");
+						System.out.println("Logged in successfully.");
 
-					break;
-				case 2:
-					System.out.println("[Register]\n");
-					for (;;) {
+						engine.swap(
+							next.isPresent()
+								? next.get()
+								: account.current().isPresent()
+									? new HomeService()
+									: new AccountService()
+						);
+						return;
+					case 2:
+						System.out.println("[Register]\n");
 						// email
 						System.out.println("Enter your email:");
-						for (;;) {
+						email:for (;;) {
 							System.out.print("> ");
 							email = scanner.nextLine();
 
@@ -100,14 +110,23 @@ public class AccountService implements Service {
 								System.out.println(
 									"Email must follow the format: <username>@<domain>"
 								);
-								continue;
+								continue email;
+							}
+
+							if (account.exists(email)) {
+								System.out.println(
+									"Email already exists. Login instead."
+								);
+								Console.waitForEnter();
+
+								continue main;
 							}
 
 							break;
 						}
 						// password
 						System.out.println("Enter your password:");
-						for (;;) {
+						password:for (;;) {
 							System.out.print("> ");
 							password = scanner.nextLine();
 
@@ -119,10 +138,10 @@ public class AccountService implements Service {
 								System.out.println(
 									"Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one symbol."
 								);
-								continue;
+								continue password;
 							}
 
-							break;
+							break password;
 						}
 						// first name
 						System.out.println("Enter your first name:");
@@ -175,35 +194,33 @@ public class AccountService implements Service {
 								role
 							);
 						} catch (
-							InvalidEmailException | InvalidPasswordException e
+							InvalidEmailException
+							| InvalidPasswordException
+							| UserAlreadyExistsException e
 						) {
 							throw new IllegalStateException(e);
 						}
 
-						break;
-					}
-					System.out.println("Registered successfully.");
+						System.out.println("Registered successfully.");
 
-					break;
-				case 0:
-					System.out.println("[Exit]\n");
-					engine.exit();
-					return;
-				default:
-					System.out.println("Invalid choice.");
-					continue;
+						engine.swap(
+							next.isPresent()
+								? next.get()
+								: account.current().isPresent()
+									? new HomeService()
+									: new AccountService()
+						);
+						return;
+					case 0:
+						System.out.println("[Exit]\n");
+						engine.exit();
+						return;
+					default:
+						System.out.println("Invalid choice.");
+						continue mainChoice;
+				}
 			}
-
-			break;
 		}
-
-		engine.swap(
-			next.isPresent()
-				? next.get()
-				: account.current().isPresent()
-					? new HomeService()
-					: new AccountService()
-		);
 	}
 
 	@Override

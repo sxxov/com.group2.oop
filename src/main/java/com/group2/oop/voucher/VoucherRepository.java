@@ -17,7 +17,7 @@ public class VoucherRepository
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onMutate(
+	public void onMutated(
 		@Nullable Object k,
 		@Nullable Object v,
 		MutationNotifier ctx
@@ -32,6 +32,6 @@ public class VoucherRepository
 			}
 		}
 
-		super.onMutate(k, v, ctx);
+		super.onMutated(k, v, ctx);
 	}
 }

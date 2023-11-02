@@ -1,10 +1,10 @@
 package com.group2.oop.form;
 
-import com.group2.oop.account.User;
 import com.group2.oop.db.Effect;
 import com.group2.oop.store.Store;
 import com.group2.oop.store.Supply;
 import java.io.Serializable;
+import java.util.UUID;
 
 public class ImageForm implements Serializable {
 
@@ -14,9 +14,9 @@ public class ImageForm implements Serializable {
 		return src;
 	}
 
-	private User submitter;
+	private UUID submitter;
 
-	public User submitter() {
+	public UUID submitter() {
 		return submitter;
 	}
 
@@ -27,13 +27,13 @@ public class ImageForm implements Serializable {
 		return status.supply();
 	}
 
-	public ImageForm(String src, User submitter, ImageFormStatus status) {
+	public ImageForm(String src, UUID submitter, ImageFormStatus status) {
 		this.src = src;
 		this.submitter = submitter;
 		this.status = new Store<>(status);
 	}
 
-	public ImageForm(String src, User submitter) {
+	public ImageForm(String src, UUID submitter) {
 		this(src, submitter, ImageFormStatus.PENDING);
 	}
 

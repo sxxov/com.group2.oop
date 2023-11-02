@@ -2,6 +2,7 @@ package com.group2.oop.admin;
 
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
+import com.group2.oop.account.UserRepository;
 import com.group2.oop.account.UserRole;
 import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 
 public class AdminService implements Service {
 
+	public final UserRepository userRepository = D.get(UserRepository.class);
 	public final AccountManager account = D.get(AccountManager.class);
 	private final Scanner scanner = D.get(Scanner.class);
 	private final ImageFormManager imageFormManager = new ImageFormManager();
@@ -33,10 +35,12 @@ public class AdminService implements Service {
 		System.out.println("---");
 		for (int i = 0; i < imageForms.length; i++) {
 			var image = imageForms[i];
+			var submitter = userRepository.get(image.submitter());
+
 			System.out.println(
 				(i + 1) +
 				". " +
-				image.submitter().email() +
+				(submitter == null ? "<anonymous>" : submitter.email()) +
 				"\t : " +
 				image.src() +
 				"\t - " +
@@ -121,7 +125,7 @@ public class AdminService implements Service {
 						}
 
 						imageFormManager.approve(
-							approvableImages[i - 1].submitter().uuid(),
+							approvableImages[i - 1].submitter(),
 							approvableImages[i - 1].src()
 						);
 						System.out.println("Image approved.");
@@ -173,7 +177,7 @@ public class AdminService implements Service {
 						}
 
 						imageFormManager.reject(
-							rejectableImages[i - 1].submitter().uuid(),
+							rejectableImages[i - 1].submitter(),
 							rejectableImages[i - 1].src()
 						);
 						System.out.println("Image rejected.");

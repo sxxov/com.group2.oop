@@ -3,6 +3,7 @@ package com.group2.oop.form;
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
 import com.group2.oop.account.UnauthorisedException;
+import com.group2.oop.account.UserRepository;
 import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
@@ -12,9 +13,10 @@ import java.util.Scanner;
 
 public class ImageFormService implements Service {
 
+	public final UserRepository userRepository = D.get(UserRepository.class);
+	private final AccountManager account = D.get(AccountManager.class);
 	private final Scanner scanner = D.get(Scanner.class);
 	private ImageFormManager manager = D.get(ImageFormManager.class);
-	private final AccountManager account = D.get(AccountManager.class);
 
 	private final Service next;
 
@@ -30,10 +32,12 @@ public class ImageFormService implements Service {
 		System.out.println("---");
 		for (int i = 0; i < imageForms.length; i++) {
 			var image = imageForms[i];
+			var submitter = userRepository.get(image.submitter());
+
 			System.out.println(
 				(i + 1) +
 				". " +
-				image.submitter().email() +
+				(submitter == null ? "<anonymous>" : submitter.email()) +
 				"\t : " +
 				image.src() +
 				"\t - " +
@@ -73,7 +77,10 @@ public class ImageFormService implements Service {
 
 						var filepath = scanner.nextLine();
 						try {
-							manager.submit(filepath);
+							manager.submit(
+								account.current().get().uuid(),
+								filepath
+							);
 						} catch (UnauthorisedException e) {
 							engine.swap(new AccountService(this));
 							return;

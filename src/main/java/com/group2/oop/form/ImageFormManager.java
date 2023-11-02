@@ -1,6 +1,5 @@
 package com.group2.oop.form;
 
-import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.UnauthorisedException;
 import com.group2.oop.account.UserRepository;
 import com.group2.oop.dependency.D;
@@ -16,17 +15,12 @@ public class ImageFormManager {
 
 	private final UserRepository users = D.get(UserRepository.class);
 
-	private final AccountManager account = D.get(AccountManager.class);
-
-	public ImageForm submit(String src) throws UnauthorisedException {
-		var user = account.current();
-
-		if (user.isEmpty()) throw new UnauthorisedException();
-
-		var image = new ImageForm(src, user.get());
+	public ImageForm submit(UUID uuid, String src)
+		throws UnauthorisedException {
+		var image = new ImageForm(src, uuid);
 
 		repository
-			.drill(user.get().uuid()) //
+			.drill(uuid) //
 			.drill(image.src())
 			.put(image);
 

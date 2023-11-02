@@ -20,12 +20,11 @@ public class AccountManager {
 	}
 
 	public Optional<User> login(String email, char[] password) {
-		var u = userRepository.get(email);
-		if (u.isEmpty()) {
+		var user = userRepository.get(email);
+		if (user == null) {
 			return current = Optional.empty();
 		}
 
-		var user = u.get();
 		var auth = new PasswordAuth();
 		if (auth.authenticate(password, user.token())) {
 			return current = Optional.of(user);

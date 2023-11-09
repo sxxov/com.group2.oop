@@ -13,6 +13,8 @@ public record User(
 	UserRole role
 )
 	implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public User {
 		Objects.requireNonNull(uuid);
 		Objects.requireNonNull(email);

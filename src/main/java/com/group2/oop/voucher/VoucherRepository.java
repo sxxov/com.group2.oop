@@ -11,6 +11,8 @@ import javax.annotation.Nullable;
 public class VoucherRepository
 	extends Repository<UUID, SubRepository<String, Voucher>> {
 
+	private static final long serialVersionUID = 1L;
+
 	public MapDrill1<String, Voucher> drill(UUID k) {
 		return new MapDrill2<>(this).drill(k);
 	}

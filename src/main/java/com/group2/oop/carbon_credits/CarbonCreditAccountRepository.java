@@ -8,6 +8,8 @@ import java.util.UUID;
 public class CarbonCreditAccountRepository
 	extends Repository<UUID, CarbonCreditAccount> {
 
+	private static final long serialVersionUID = 1L;
+
 	public MapDrill0<UUID, CarbonCreditAccount> drill(UUID k) {
 		return new MapDrill1<>(this).drill(k);
 	}

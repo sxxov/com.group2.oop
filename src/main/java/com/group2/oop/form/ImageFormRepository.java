@@ -9,6 +9,8 @@ import java.util.UUID;
 public class ImageFormRepository
 	extends Repository<UUID, SubRepository<String, ImageForm>> {
 
+	private static final long serialVersionUID = 1L;
+
 	public MapDrill1<String, ImageForm> drill(UUID k) {
 		return new MapDrill2<>(this).drill(k);
 	}

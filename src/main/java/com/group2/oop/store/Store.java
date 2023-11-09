@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 public class Store<T> implements WritableStore<T>, Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private T value;
 	private transient ArrayList<StoreSubscriber<T>> subscribers = new ArrayList<>();
 

@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 public class SubRepository<K, V> extends EffectSubscribingMap<K, V> {
 
+	private static final long serialVersionUID = 1L;
+
 	@Effect
 	private Store<Integer> store = new Store<>(0);
 

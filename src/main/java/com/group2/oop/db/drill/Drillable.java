@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 public class Drillable<K, V> implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	protected SubRepository<K, V> ref;
 
 	public SubRepository<K, V> ref() {

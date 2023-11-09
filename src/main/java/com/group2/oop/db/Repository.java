@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 public class Repository<K, V> extends SubRepository<K, V> {
 
+	private static final long serialVersionUID = 1L;
+
 	private final String id;
 	private transient MapIO<K, V> io;
 

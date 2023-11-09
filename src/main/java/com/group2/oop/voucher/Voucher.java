@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public class Voucher implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final UUID NO_CLAIMANT = UUID.fromString(
 		"00000000-0000-0000-0000-000000000000"
 	);

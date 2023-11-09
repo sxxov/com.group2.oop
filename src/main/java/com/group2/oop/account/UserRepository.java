@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 public class UserRepository extends Repository<UUID, User> {
 
+	private static final long serialVersionUID = 1L;
+
 	public MapDrill0<UUID, User> drill(UUID k) {
 		return new MapDrill1<>(this).drill(k);
 	}

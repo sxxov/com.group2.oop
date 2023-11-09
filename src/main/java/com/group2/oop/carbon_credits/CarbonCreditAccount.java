@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 public class CarbonCreditAccount implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@Effect
 	private Store<Double> balance;
 

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Supply<T> implements ReadableStore<T>, Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private Store<T> store;
 
 	public Supply(Store<T> store) {

@@ -79,7 +79,9 @@ public class RankingService implements Service {
 	private int getCurrentUserRank() {
 		var userToAmount = getAllUserAndAmount();
 
-		var i = 0;
+		System.out.println(userToAmount.size());
+
+		var i = 1;
 		for (var entry : userToAmount) {
 			var user = entry.getKey();
 			if (user.uuid().equals(account.current().get().uuid())) {
@@ -111,11 +113,11 @@ public class RankingService implements Service {
 	private void printLeaderboard() {
 		var userToAmount = getAllUserAndAmount();
 
-		var i = 0;
+		var i = 1;
 		for (var entry : userToAmount) {
 			var user = entry.getKey();
 			var amount = entry.getValue();
-			System.out.println((i + 1) + ". " + user.email() + "\t- " + amount);
+			System.out.println(i + ". " + user.email() + "\t- " + amount);
 			++i;
 		}
 	}

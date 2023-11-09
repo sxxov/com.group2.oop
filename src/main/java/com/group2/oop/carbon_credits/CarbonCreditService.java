@@ -28,9 +28,7 @@ public class CarbonCreditService implements Service {
 
 	@Override
 	public void init(Engine engine) {
-		var carbonAccount = carbon
-			.drill(account.current().get().uuid())
-			.orElsePut(v -> new CarbonCreditAccount(account.current().get()));
+		var carbonAccount = carbon.get(account.current().get().uuid());
 
 		main:for (;;) {
 			System.out.println(

@@ -2,7 +2,6 @@ package com.group2.oop.voucher;
 
 import com.group2.oop.account.AccountManager;
 import com.group2.oop.account.AccountService;
-import com.group2.oop.carbon_credits.CarbonCreditAccount;
 import com.group2.oop.carbon_credits.CarbonCreditAccountRepository;
 import com.group2.oop.console.Console;
 import com.group2.oop.dependency.D;
@@ -148,13 +147,9 @@ public class VoucherService implements Service {
 								}
 
 								var price = voucher.price();
-								var credit = carbonCredit
-									.drill(account.current().get().uuid())
-									.orElsePut(v ->
-										new CarbonCreditAccount(
-											account.current().get()
-										)
-									);
+								var credit = carbonCredit.get(
+									account.current().get().uuid()
+								);
 
 								if (price > credit.amount().get()) {
 									System.out.println(

@@ -1,9 +1,9 @@
 package com.group2.oop.carbon_credits;
 
-import com.group2.oop.account.User;
 import com.group2.oop.db.Effect;
 import com.group2.oop.store.Store;
 import java.io.Serializable;
+import java.util.UUID;
 
 public class CarbonCreditAccount implements Serializable {
 
@@ -16,17 +16,17 @@ public class CarbonCreditAccount implements Serializable {
 		return balance;
 	}
 
-	private User owner;
+	private UUID owner;
 
-	public User owner() {
+	public UUID owner() {
 		return owner;
 	}
 
-	public CarbonCreditAccount(User owner) {
+	public CarbonCreditAccount(UUID owner) {
 		this(owner, 0);
 	}
 
-	public CarbonCreditAccount(User owner, double amount) {
+	public CarbonCreditAccount(UUID owner, double amount) {
 		this.owner = owner;
 		this.balance = new Store<>(amount);
 	}

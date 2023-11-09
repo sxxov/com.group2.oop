@@ -46,7 +46,7 @@ public class AdminService implements Service {
 			System.out.println("1. Manage submitted images");
 			System.out.println("2. Manage vouchers");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 			System.out.print("> ");
 
 			try {
@@ -66,7 +66,7 @@ public class AdminService implements Service {
 					engine.swap(new AdminVoucherService(this));
 					return;
 				case 0:
-					System.out.println("[Exit]\n");
+					System.out.println("[Back]\n");
 					engine.swap(next);
 					return;
 				default:

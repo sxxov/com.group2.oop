@@ -56,7 +56,7 @@ public class ImageFormService implements Service {
 			System.out.println("1. Submit new image");
 			System.out.println("2. History");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 
 			int choice;
 			mainChoice:for (;;) {
@@ -106,7 +106,7 @@ public class ImageFormService implements Service {
 						Console.waitForEnter();
 						continue main;
 					case 0:
-						System.out.println("[Exit]\n");
+						System.out.println("[Back]\n");
 						break main;
 					default:
 						System.out.println("Invalid choice");

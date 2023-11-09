@@ -65,7 +65,7 @@ public class VoucherService implements Service {
 			System.out.println("2. Redeem a voucher");
 			System.out.println("3. History");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 
 			int choice;
 			mainChoice:for (;;) {
@@ -102,7 +102,7 @@ public class VoucherService implements Service {
 							System.out.println("Pick a voucher to claim:");
 							printVouchers(shopVouchers);
 							System.out.println("");
-							System.out.println("0. Exit");
+							System.out.println("0. Back");
 
 							int voucherChoice;
 							shopVoucherChoice:for (;;) {
@@ -120,7 +120,7 @@ public class VoucherService implements Service {
 								}
 
 								if (voucherChoice == 0) {
-									System.out.println("[Exit]\n");
+									System.out.println("[Back]\n");
 									continue main;
 								}
 
@@ -208,7 +208,7 @@ public class VoucherService implements Service {
 							System.out.println("Pick a voucher to redeem:");
 							printVouchers(ownedVouchers);
 							System.out.println("");
-							System.out.println("0. Exit");
+							System.out.println("0. Back");
 
 							int voucherChoice;
 							redeemVoucherChoice:for (;;) {
@@ -226,7 +226,7 @@ public class VoucherService implements Service {
 								}
 
 								if (voucherChoice == 0) {
-									System.out.println("[Exit]\n");
+									System.out.println("[Back]\n");
 									continue main;
 								}
 
@@ -283,7 +283,7 @@ public class VoucherService implements Service {
 						Console.waitForEnter();
 						continue main;
 					case 0:
-						System.out.println("[Exit]\n");
+						System.out.println("[Back]\n");
 						break main;
 					default:
 						System.out.println("Invalid choice.");

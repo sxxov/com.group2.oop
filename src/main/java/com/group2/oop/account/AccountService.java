@@ -88,7 +88,7 @@ public class AccountService implements Service {
 							continue main;
 						}
 
-						System.out.println("Logged in successfully.");
+						System.out.println("Logged in successfully.\n");
 
 						engine.swap(
 							next.isPresent()
@@ -201,7 +201,7 @@ public class AccountService implements Service {
 							throw new IllegalStateException(e);
 						}
 
-						System.out.println("Registered successfully.");
+						System.out.println("Registered successfully.\n");
 
 						engine.swap(
 							next.isPresent()

@@ -43,7 +43,7 @@ public class RankingService implements Service {
 			System.out.println("");
 			System.out.println("1. View global leaderboard");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 
 			int choice;
 			mainChoice:for (;;) {
@@ -64,7 +64,7 @@ public class RankingService implements Service {
 						Console.waitForEnter();
 						continue main;
 					case 0:
-						System.out.println("[Exit]\n");
+						System.out.println("[Back]\n");
 						break main;
 				}
 			}

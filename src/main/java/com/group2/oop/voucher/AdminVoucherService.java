@@ -60,7 +60,7 @@ public class AdminVoucherService implements Service {
 			System.out.println("");
 			System.out.println("99. Create new voucher");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 
 			int choice;
 			mainChoice:for (;;) {
@@ -73,7 +73,7 @@ public class AdminVoucherService implements Service {
 				}
 
 				if (choice == 0) {
-					System.out.println("[Exit]\n");
+					System.out.println("[Back]\n");
 					break main;
 				}
 
@@ -136,7 +136,7 @@ public class AdminVoucherService implements Service {
 				System.out.println("1. Edit voucher");
 				System.out.println("2. Delete voucher");
 				System.out.println("");
-				System.out.println("0. Exit");
+				System.out.println("0. Back");
 
 				int actionChoice;
 				actionChoice:for (;;) {
@@ -224,7 +224,7 @@ public class AdminVoucherService implements Service {
 							Console.waitForEnter();
 							continue main;
 						case 0:
-							System.out.println("[Exit]\n");
+							System.out.println("[Back]\n");
 							break main;
 						default:
 							System.out.println("Invalid action choice.");

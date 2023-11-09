@@ -67,7 +67,7 @@ public class AdminImageFormService implements Service {
 				System.out.println("Select an image to manage:");
 				printImageForms(pendingImages);
 				System.out.println("");
-				System.out.println("0. Exit");
+				System.out.println("0. Back");
 
 				int pendingIndex;
 				pickIndex:for (;;) {
@@ -254,7 +254,7 @@ public class AdminImageFormService implements Service {
 			System.out.println("1. Approve or reject an image");
 			System.out.println("2. Manage previous approvals or rejections");
 			System.out.println("");
-			System.out.println("0. Exit");
+			System.out.println("0. Back");
 
 			int choice;
 			mainChoice:for (;;) {
@@ -288,7 +288,7 @@ public class AdminImageFormService implements Service {
 								"3. Manage approved or rejected images"
 							);
 							System.out.println("");
-							System.out.println("0. Exit");
+							System.out.println("0. Back");
 
 							int historyFilterChoice;
 							Supplier<ImageForm[]> getHistoryImages;
@@ -334,7 +334,7 @@ public class AdminImageFormService implements Service {
 													.toArray(new ImageForm[0]);
 										break historyFilterChoice;
 									case 0:
-										System.out.println("[Exit]\n");
+										System.out.println("[Back]\n");
 										break main;
 									default:
 										System.out.println("Invalid choice.");
@@ -346,7 +346,7 @@ public class AdminImageFormService implements Service {
 							continue history;
 						}
 					case 0:
-						System.out.println("[Exit]\n");
+						System.out.println("[Back]\n");
 						break main;
 					default:
 						System.out.println("Invalid choice.");

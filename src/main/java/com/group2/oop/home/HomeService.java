@@ -35,7 +35,7 @@ public class HomeService implements Service {
 			System.out.println("3. Your vouchers");
 			System.out.println("4. Your ranking");
 			System.out.println("");
-			System.out.println("0. Logout & Exit");
+			System.out.println("0. Logout");
 			if (user.role() == UserRole.ADMIN) {
 				System.out.println("99. Enter admin panel");
 			}
@@ -74,7 +74,7 @@ public class HomeService implements Service {
 
 						break main;
 					case 0:
-						System.out.println("[Logout & Exit]\n");
+						System.out.println("[Logout]\n");
 						account.logout();
 						engine.swap(new AccountService());
 

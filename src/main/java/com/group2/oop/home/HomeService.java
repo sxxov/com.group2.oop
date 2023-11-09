@@ -7,6 +7,7 @@ import com.group2.oop.admin.AdminService;
 import com.group2.oop.carbon_credits.CarbonCreditService;
 import com.group2.oop.dependency.D;
 import com.group2.oop.form.ImageFormService;
+import com.group2.oop.rank.RankingService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
 import com.group2.oop.voucher.VoucherService;
@@ -32,6 +33,7 @@ public class HomeService implements Service {
 			System.out.println("1. Your images");
 			System.out.println("2. Your carbon credits");
 			System.out.println("3. Your vouchers");
+			System.out.println("4. Your ranking");
 			System.out.println("");
 			System.out.println("0. Logout & Exit");
 			if (user.role() == UserRole.ADMIN) {
@@ -64,6 +66,11 @@ public class HomeService implements Service {
 					case 3:
 						System.out.println("[Your vouchers]\n");
 						engine.swap(new VoucherService());
+
+						break main;
+					case 4:
+						System.out.println("[Your ranking]\n");
+						engine.swap(new RankingService());
 
 						break main;
 					case 0:

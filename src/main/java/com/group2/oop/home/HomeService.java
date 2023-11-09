@@ -10,6 +10,7 @@ import com.group2.oop.form.ImageFormService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
 import com.group2.oop.voucher.VoucherService;
+import com.group2.oop.rank.RankingSystem;
 import java.util.Scanner;
 
 public class HomeService implements Service {
@@ -32,6 +33,7 @@ public class HomeService implements Service {
 			System.out.println("1. Your images");
 			System.out.println("2. Your carbon credits");
 			System.out.println("3. Your vouchers");
+      System.out.println("4. User ranking");
 			System.out.println("");
 			System.out.println("0. Logout & Exit");
 			if (user.role() == UserRole.ADMIN) {
@@ -66,6 +68,11 @@ public class HomeService implements Service {
 						engine.swap(new VoucherService());
 
 						break main;
+          case 4:
+            System.out.println("[User ranking]\n");
+            engine.swap(new RankingSystem());
+
+            break main;
 					case 0:
 						System.out.println("[Logout & Exit]\n");
 						account.logout();

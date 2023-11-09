@@ -11,6 +11,7 @@ import com.group2.oop.form.ImageFormRepository;
 import com.group2.oop.service.Engine;
 import com.group2.oop.voucher.VoucherManager;
 import com.group2.oop.voucher.VoucherRepository;
+import com.group2.oop.rank.RankingSystem;
 import java.util.Scanner;
 
 public class Main {
@@ -33,6 +34,7 @@ public class Main {
 		);
 		D.register(VoucherRepository.class, new VoucherRepository());
 		D.register(VoucherManager.class, new VoucherManager());
+    D.register(RankingSystem.class, new RankingSystem());
 		var initialService = new AccountService();
 		var engine = new Engine(initialService);
 		D.register(Engine.class, engine);

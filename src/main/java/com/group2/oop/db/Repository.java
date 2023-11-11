@@ -32,15 +32,13 @@ public class Repository<K, V> extends SubRepository<K, V> {
 		io = new MapIO<>(this, getPath(id));
 
 		try {
-			putAll(io.read());
+			io.read();
 		} catch (IOException e) {
 			System.out.println(
 				"Error reading repository(" + id + ") from disk."
 			);
 			e.printStackTrace();
 		}
-
-		subscribeToEffects();
 	}
 
 	protected String getPath(String id) {

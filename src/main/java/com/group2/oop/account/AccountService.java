@@ -27,7 +27,7 @@ public class AccountService implements Service {
 	public void init(Engine engine) {
 		account.logout();
 
-		main:for (;;) {
+		main:do {
 			System.out.println(
 				"------------------- Account -------------------"
 			);
@@ -220,7 +220,7 @@ public class AccountService implements Service {
 						continue mainChoice;
 				}
 			}
-		}
+		} while (true);
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.group2.oop.dependency.D;
 import com.group2.oop.home.HomeService;
 import com.group2.oop.service.Engine;
 import com.group2.oop.service.Service;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class AccountService implements Service {
@@ -13,14 +12,14 @@ public class AccountService implements Service {
 	private final Scanner scanner = D.get(Scanner.class);
 	private final AccountManager account = D.get(AccountManager.class);
 
-	private final Optional<Service> next;
+	private final Service next;
 
 	public AccountService() {
-		this.next = Optional.empty();
+		this.next = new HomeService();
 	}
 
 	public AccountService(Service next) {
-		this.next = Optional.of(next);
+		this.next = next;
 	}
 
 	@Override
@@ -49,24 +48,25 @@ public class AccountService implements Service {
 				}
 
 				// TODO: don't store passwords in heap, use char[] instead
-				String email, password;
 				switch (choice) {
 					case 1:
 						System.out.println("[Login]\n");
 						// email
 						System.out.println("Enter your email:");
+
+						String loginEmail, loginPassword;
 						email:for (;;) {
 							System.out.print("> ");
-							email = scanner.nextLine();
+							loginEmail = scanner.nextLine();
 
-							if (!AccountManager.isValidEmail(email)) {
+							if (!AccountManager.isValidEmail(loginEmail)) {
 								System.out.println(
 									"Email must follow the format: <username>@<domain>"
 								);
 								continue email;
 							}
 
-							if (!account.exists(email)) {
+							if (!account.exists(loginEmail)) {
 								System.out.println("Email does not exist.");
 								Console.waitForEnter();
 
@@ -78,9 +78,12 @@ public class AccountService implements Service {
 						// password
 						System.out.println("Enter your password:");
 						System.out.print("> ");
-						password = scanner.nextLine();
+						loginPassword = scanner.nextLine();
 
-						var u = account.login(email, password.toCharArray());
+						var u = account.login(
+							loginEmail,
+							loginPassword.toCharArray()
+						);
 						if (u.isEmpty()) {
 							System.out.println("Invalid email or password.");
 							Console.waitForEnter();
@@ -90,30 +93,25 @@ public class AccountService implements Service {
 
 						System.out.println("Logged in successfully.\n");
 
-						engine.swap(
-							next.isPresent()
-								? next.get()
-								: account.current().isPresent()
-									? new HomeService()
-									: new AccountService()
-						);
+						engine.swap(next);
 						return;
 					case 2:
 						System.out.println("[Register]\n");
 						// email
 						System.out.println("Enter your email:");
+						String registerEmail, registerPassword;
 						email:for (;;) {
 							System.out.print("> ");
-							email = scanner.nextLine();
+							registerEmail = scanner.nextLine();
 
-							if (!AccountManager.isValidEmail(email)) {
+							if (!AccountManager.isValidEmail(registerEmail)) {
 								System.out.println(
 									"Email must follow the format: <username>@<domain>"
 								);
 								continue email;
 							}
 
-							if (account.exists(email)) {
+							if (account.exists(registerEmail)) {
 								System.out.println(
 									"Email already exists. Login instead."
 								);
@@ -128,11 +126,11 @@ public class AccountService implements Service {
 						System.out.println("Enter your password:");
 						password:for (;;) {
 							System.out.print("> ");
-							password = scanner.nextLine();
+							registerPassword = scanner.nextLine();
 
 							if (
 								!AccountManager.isValidPassword(
-									password.toCharArray()
+									registerPassword.toCharArray()
 								)
 							) {
 								System.out.println(
@@ -146,13 +144,13 @@ public class AccountService implements Service {
 						// first name
 						System.out.println("Enter your first name:");
 						System.out.print("> ");
-						var firstName = scanner.nextLine();
+						var registerFirstName = scanner.nextLine();
 						// last name
 						System.out.println("Enter your last name:");
 						System.out.print("> ");
-						var lastName = scanner.nextLine();
+						var registerLastName = scanner.nextLine();
 
-						var role = UserRole.USER;
+						var registerRole = UserRole.USER;
 						int roleIndex;
 						System.out.println("Pick your role:");
 						System.out.println("1. User");
@@ -171,10 +169,10 @@ public class AccountService implements Service {
 
 							switch (roleIndex) {
 								case 1:
-									role = UserRole.USER;
+									registerRole = UserRole.USER;
 									break;
 								case 2:
-									role = UserRole.ADMIN;
+									registerRole = UserRole.ADMIN;
 									break;
 								default:
 									System.out.println("Invalid role.");
@@ -187,11 +185,11 @@ public class AccountService implements Service {
 
 						try {
 							account.register(
-								email,
-								password.toCharArray(),
-								firstName,
-								lastName,
-								role
+								registerEmail,
+								registerPassword.toCharArray(),
+								registerFirstName,
+								registerLastName,
+								registerRole
 							);
 						} catch (
 							InvalidEmailException
@@ -203,13 +201,7 @@ public class AccountService implements Service {
 
 						System.out.println("Registered successfully.\n");
 
-						engine.swap(
-							next.isPresent()
-								? next.get()
-								: account.current().isPresent()
-									? new HomeService()
-									: new AccountService()
-						);
+						engine.swap(next);
 						return;
 					case 0:
 						System.out.println("[Exit]\n");

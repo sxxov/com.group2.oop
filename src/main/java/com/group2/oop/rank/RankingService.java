@@ -79,8 +79,6 @@ public class RankingService implements Service {
 	private int getCurrentUserRank() {
 		var userToAmount = getAllUserAndAmount();
 
-		System.out.println(userToAmount.size());
-
 		var i = 1;
 		for (var entry : userToAmount) {
 			var user = entry.getKey();
@@ -106,7 +104,7 @@ public class RankingService implements Service {
 
 				return new SimpleEntry<User, Double>(user, amount);
 			})
-			.sorted((a, b) -> a.getValue().compareTo(b.getValue()))
+			.sorted((b, a) -> a.getValue().compareTo(b.getValue()))
 			.toList();
 	}
 

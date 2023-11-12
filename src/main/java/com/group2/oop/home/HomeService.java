@@ -25,7 +25,7 @@ public class HomeService implements Service {
 			return;
 		}
 
-		main:for (;;) {
+		main:do {
 			System.out.println("------------------- Home -------------------");
 			var user = account.current().get();
 			System.out.println("Welcome, " + user.firstName() + "!");
@@ -96,7 +96,7 @@ public class HomeService implements Service {
 						continue mainChoice;
 				}
 			}
-		}
+		} while (true);
 	}
 
 	@Override

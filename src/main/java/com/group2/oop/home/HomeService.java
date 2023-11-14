@@ -15,8 +15,8 @@ import java.util.Scanner;
 
 public class HomeService implements Service {
 
-	public final AccountManager account = D.get(AccountManager.class);
 	public final Scanner scanner = D.get(Scanner.class);
+	public final AccountManager account = D.get(AccountManager.class);
 
 	@Override
 	public void init(Engine engine) {

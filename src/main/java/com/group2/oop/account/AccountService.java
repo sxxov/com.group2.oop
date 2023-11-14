@@ -53,8 +53,7 @@ public class AccountService implements Service {
 						System.out.println("[Login]\n");
 						// email
 						System.out.println("Enter your email:");
-
-						String loginEmail, loginPassword;
+						String loginEmail;
 						email:for (;;) {
 							System.out.print("> ");
 							loginEmail = scanner.nextLine();
@@ -75,10 +74,11 @@ public class AccountService implements Service {
 
 							break email;
 						}
+
 						// password
 						System.out.println("Enter your password:");
 						System.out.print("> ");
-						loginPassword = scanner.nextLine();
+						var loginPassword = scanner.nextLine();
 
 						var u = account.login(
 							loginEmail,
@@ -99,7 +99,7 @@ public class AccountService implements Service {
 						System.out.println("[Register]\n");
 						// email
 						System.out.println("Enter your email:");
-						String registerEmail, registerPassword;
+						String registerEmail;
 						email:for (;;) {
 							System.out.print("> ");
 							registerEmail = scanner.nextLine();
@@ -122,8 +122,10 @@ public class AccountService implements Service {
 
 							break;
 						}
+
 						// password
 						System.out.println("Enter your password:");
+						String registerPassword;
 						password:for (;;) {
 							System.out.print("> ");
 							registerPassword = scanner.nextLine();
@@ -141,46 +143,47 @@ public class AccountService implements Service {
 
 							break password;
 						}
+
 						// first name
 						System.out.println("Enter your first name:");
 						System.out.print("> ");
 						var registerFirstName = scanner.nextLine();
+
 						// last name
 						System.out.println("Enter your last name:");
 						System.out.print("> ");
 						var registerLastName = scanner.nextLine();
 
-						var registerRole = UserRole.USER;
-						int roleIndex;
 						System.out.println("Pick your role:");
 						System.out.println("1. User");
 						System.out.println("2. Admin");
-						for (;;) {
+						UserRole registerRole;
+						role:for (;;) {
 							System.out.print("> ");
 
+							int roleIndex;
 							try {
 								roleIndex =
 									Integer.parseInt(scanner.nextLine());
 							} catch (NumberFormatException e) {
 								System.out.println("Invalid role.");
 
-								continue;
+								continue role;
 							}
 
 							switch (roleIndex) {
 								case 1:
+									System.out.println("[User]\n");
 									registerRole = UserRole.USER;
-									break;
+									break role;
 								case 2:
+									System.out.println("[Admin]\n");
 									registerRole = UserRole.ADMIN;
-									break;
+									break role;
 								default:
 									System.out.println("Invalid role.");
-
-									continue;
+									continue role;
 							}
-
-							break;
 						}
 
 						try {
